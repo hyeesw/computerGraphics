@@ -128,22 +128,13 @@ void compose_imgui_frame()
 
   // control window
   {
-    // Set initial position and size for the control window
-    ImGui::SetNextWindowPos(ImVec2(50, 50), ImGuiCond_FirstUseEver);
-    ImGui::SetNextWindowSize(ImVec2(400, 300), ImGuiCond_FirstUseEver);
-
     ImGui::Begin("콘트롤(control)");
 
     // Tranlation
     ImGui::SliderFloat3("translate", glm::value_ptr(g_vec_model_translate), -3.0f, 3.0f);
 
-    // TODO : Rotation    
-    // quat qt;
-    // if (ImGui::gizmo3D("Rotation", qt)) { //조절기 조작하면 qt 값이 바뀌면서 if문이 true가 됨
-    //   g_quat_model_rotation = qt;
-    // }
-
-    //조절기 조작하면 g_quat_model_rotation 값이 바뀜
+    // Rotatin
+    // 조절기 조작하면 g_quat_model_rotation 값이 바뀜
     ImGui::gizmo3D("Rotation", g_quat_model_rotation);
 
     // Scale
@@ -342,8 +333,8 @@ void set_transform()
   
   // TODO: Translation, Rotation, Scaling 을 모델에 적용
     g_mat_model = glm::translate(glm::mat4(1.0f), g_vec_model_translate) *
-                glm::mat4_cast(g_quat_model_rotation) *
-                glm::scale(glm::mat4(1.0f), g_vec_model_scale);
+                  glm::mat4_cast(g_quat_model_rotation) *
+                  glm::scale(glm::mat4(1.0f), g_vec_model_scale);
 }
 
 
