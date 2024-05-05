@@ -128,6 +128,10 @@ void compose_imgui_frame()
 
   // control window
   {
+    // Set initial position and size for the control window
+    ImGui::SetNextWindowPos(ImVec2(50, 50), ImGuiCond_FirstUseEver);
+    ImGui::SetNextWindowSize(ImVec2(400, 300), ImGuiCond_FirstUseEver);
+
     ImGui::Begin("콘트롤(control)");
 
     // TODO
