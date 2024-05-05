@@ -18,12 +18,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
-// In your main.cpp or before including "imGuIZMOquat.h"
-#ifndef IMGUI_DEFINE_MATH_OPERATORS
-#define IMGUI_DEFINE_MATH_OPERATORS
-#endif
 #include "imGuIZMOquat.h"
-
 
 // model hpp
 #include "models/avocado_vlist.hpp"
@@ -143,12 +138,9 @@ void compose_imgui_frame()
     ImGui::SliderFloat3("translate", glm::value_ptr(g_vec_model_translate), -3.0f, 3.0f);
 
     // Rotation
-    glm::vec3 euler; // 오일러 각
-    glm::vec3 axis = glm::axis(g_quat_model_rotation);  // 축 추출
-    float angle = glm::angle(g_quat_model_rotation);  // 각도 추출
-    euler = glm::degrees(glm::eulerAngles(g_quat_model_rotation));
+    glm::vec3 euler = glm::degrees(glm::eulerAngles(g_quat_model_rotation)); //오일러 각
     // 사용자가 조작한 조절기의 오일러 각을 라디안으로 바꾼 뒤 새로운 쿼터니언 생성 -> g_quat_model_rotation에 저장
-    if (imGuIZMOquat::gizmo3D("##Rotation", euler)) {
+    if (ImGui::gizmo3D("##Rotation", euler)) {
       euler = glm::radians(euler);
       g_quat_model_rotation = glm::normalize(glm::quat(glm::vec3(euler.y, euler.x, euler.z)));
     }
