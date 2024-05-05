@@ -18,7 +18,12 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+// In your main.cpp or before including "imGuIZMOquat.h"
+#ifndef IMGUI_DEFINE_MATH_OPERATORS
+#define IMGUI_DEFINE_MATH_OPERATORS
+#endif
 #include "imGuIZMOquat.h"
+
 
 // model hpp
 #include "models/avocado_vlist.hpp"
