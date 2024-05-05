@@ -140,9 +140,19 @@ void compose_imgui_frame()
     // Rotation
     glm::vec3 euler = glm::degrees(glm::eulerAngles(g_quat_model_rotation)); //오일러 각
     // 사용자가 조작한 조절기의 오일러 각을 라디안으로 바꾼 뒤 새로운 쿼터니언 생성 -> g_quat_model_rotation에 저장
-    if (ImGui::gizmo3D("##Rotation", euler)) {
+    if (ImGui::gizmo3D("Rotation", euler)) {
       euler = glm::radians(euler);
-      g_quat_model_rotation = glm::normalize(glm::quat(glm::vec3(euler.y, euler.x, euler.z)));
+
+      // pitch (X), yaw (Y), roll (Z)
+      glm::quat qPitch = glm::angleAxis(euler.x, glm::vec3(1, 0, 0));
+      glm::quat qYaw = glm::angleAxis(euler.y, glm::vec3(0, 1, 0));
+      glm::quat qRoll = glm::angleAxis(euler.z, glm::vec3(0, 0, 1));
+
+      // Combine the angle rotations
+      glm::quat targetOrientation = qYaw * qPitch * qRoll;
+
+      // Normalize the quaternion to maintain valid rotation
+      g_quat_model_rotation = glm::normalize(targetOrientation);
     }
 
     // Scale
@@ -387,7 +397,7 @@ void init_scene()
   g_vec_model_scale = glm::vec3(1.f);
 
   // TODO: initialize quaternion for model rotation
-  // g_quat_model_rotation = ...
+  g_quat_model_rotation = glm::quat(1.0, 0.0, 0.0, 0.0); // No rotation
 
   g_fovy = 60.0f;
   g_aspect = 1.0f;
