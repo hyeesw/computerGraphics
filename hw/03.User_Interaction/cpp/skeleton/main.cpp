@@ -138,10 +138,13 @@ void compose_imgui_frame()
     ImGui::SliderFloat3("translate", glm::value_ptr(g_vec_model_translate), -3.0f, 3.0f);
 
     // TODO : Rotation    
-    quat qt = g_quat_model_rotation;
-    if (ImGui::gizmo3D("Rotation", qt)) {
-      g_quat_model_rotation = qt;
-    }
+    // quat qt;
+    // if (ImGui::gizmo3D("Rotation", qt)) { //조절기 조작하면 qt 값이 바뀌면서 if문이 true가 됨
+    //   g_quat_model_rotation = qt;
+    // }
+
+    //조절기 조작하면 g_quat_model_rotation 값이 바뀜
+    ImGui::gizmo3D("Rotation", g_quat_model_rotation)
 
     // Scale
     ImGui::SliderFloat3("scale", glm::value_ptr(g_vec_model_scale), 0.1f, 10.0f);
