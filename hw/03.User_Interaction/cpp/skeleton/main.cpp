@@ -179,31 +179,31 @@ void compose_imgui_frame()
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-  // move left
+  // move left (H)
   if (key == GLFW_KEY_H && action == GLFW_PRESS) 
     g_vec_model_translate[0] -= 0.1f;
-  // mode right
+  // mode right (L)
   if (key == GLFW_KEY_L && action == GLFW_PRESS)
     g_vec_model_translate[0] += 0.1f;
+  // move up (K)
+  if (key == GLFW_KEY_K && action == GLFW_PRESS) 
+    g_vec_model_translate[1] += 0.1f;
+  // move down (J)
+  if (key == GLFW_KEY_J && action == GLFW_PRESS) 
+    g_vec_model_translate[1] -= 0.1f;
   
-  // TODO if 문에 들어는 오는데 g_vec_model_scale += 0.1f;  이게 실행이 안됨.
-  // TODO
-  
-  std::cout << "???????key: " << key << std::endl;
-
-  // scale
+  // scale up
   if (key == GLFW_KEY_EQUAL && action == GLFW_PRESS){
-	  std::cout << "come here!" << std::endl;
-	  std::cout << g_vec_model_scale[0] << std::endl;
-          std::cout << g_vec_model_scale[1] << std::endl;
-	  std::cout << g_vec_model_scale[2] << std::endl;
 	  g_vec_model_scale[0] += 0.1f;
 	  g_vec_model_scale[1] += 0.1f;
 	  g_vec_model_scale[2] += 0.1f;
   }
-   // g_vec_model_scale += 0.1f;
-  
-  // TODO
+  //scale down
+  if (key == GLFW_KEY_MINUS && action == GLFW_PRESS) {
+    g_vec_model_scale[0] -= 0.1f;
+    g_vec_model_scale[1] -= 0.1f;
+    g_vec_model_scale[2] -= 0.1f;
+  }
 }
 
 
