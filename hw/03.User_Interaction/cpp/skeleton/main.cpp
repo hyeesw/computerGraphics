@@ -186,6 +186,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
   if (key == GLFW_KEY_L && action == GLFW_PRESS)
     g_vec_model_translate[0] += 0.1f;
   
+  // TODO if 문에 들어는 오는데 g_vec_model_scale += 0.1f;  이게 실행이 안됨.
   // TODO
   
   std::cout << "???????key: " << key << std::endl;
@@ -327,8 +328,10 @@ void set_transform()
   // projection matrix
   g_mat_proj = glm::perspective(glm::radians(g_fovy), g_aspect, 0.001f, 1000.f);
   
-  // TODO: erase the following line and write your codes to properly set g_mat_model as T*R*S
-  g_mat_model = glm::translate(g_vec_model_translate);
+  // TODO: Translation, Rotation, Scaling 을 모델에 적용
+    g_mat_model = glm::translate(glm::mat4(1.0f), g_vec_model_translate) *
+                glm::mat4_cast(g_quat_model_rotation) *
+                glm::scale(glm::mat4(1.0f), g_vec_model_scale);
 }
 
 
