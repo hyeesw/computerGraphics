@@ -187,6 +187,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     g_vec_model_translate[0] += 0.1f;
   
   // TODO
+  
+  stdout << "???????key: " << key << std::endl;
 
   // scale
   if (key == GLFW_KEY_EQUAL && action == GLFW_PRESS)
