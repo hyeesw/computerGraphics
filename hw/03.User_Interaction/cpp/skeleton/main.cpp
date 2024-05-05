@@ -144,7 +144,7 @@ void compose_imgui_frame()
     // }
 
     //조절기 조작하면 g_quat_model_rotation 값이 바뀜
-    ImGui::gizmo3D("Rotation", g_quat_model_rotation)
+    ImGui::gizmo3D("Rotation", g_quat_model_rotation);
 
     // Scale
     ImGui::SliderFloat3("scale", glm::value_ptr(g_vec_model_scale), 0.1f, 10.0f);
