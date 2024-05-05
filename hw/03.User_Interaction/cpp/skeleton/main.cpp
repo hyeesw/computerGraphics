@@ -134,8 +134,26 @@ void compose_imgui_frame()
 
     ImGui::Begin("콘트롤(control)");
 
-    // TODO
-    ImGui::SliderFloat("translate", &g_vec_model_translate[0], -3.0f, 3.0f);
+    // Tranlation
+    ImGui::SliderFloat3("translate", glm::value_ptr(g_vec_model_translate), -3.0f, 3.0f);
+
+    // Rotation
+    imGuIZMOquat::vec3 euler; //오일러 각
+    glm::vec3 axis; //회전축
+    float angle; //회전각
+
+    //쿼터니언 -> 오일러 각
+    glm::axisAngle(glm::normalize(g_quat_model_rotation), axis, angle); // 
+    euler = glm::degrees(glm::eulerAngles(glm::quat(axis * sin(angle/2.0f))));
+
+    // 사용자가 조작한 조절기의 오일러 각을 라디안으로 바꾼 뒤 새로운 쿼터니언 생성 -> g_quat_model_rotation에 저장
+    if (imGuIZMOquat::gizmo3D("##Rotation", euler)) {
+      euler = glm::radians(euler);
+      g_quat_model_rotation = glm::normalize(glm::quat(glm::vec3(euler.y, euler.x, euler.z)));
+    }
+
+    // Scale
+    ImGui::SliderFloat3("scale", glm::value_ptr(g_vec_model_scale), 0.1f, 10.0f);
 
     ImGui::End();
   }
