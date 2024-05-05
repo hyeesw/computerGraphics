@@ -188,11 +188,19 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
   
   // TODO
   
-  stdout << "???????key: " << key << std::endl;
+  std::cout << "???????key: " << key << std::endl;
 
   // scale
-  if (key == GLFW_KEY_EQUAL && action == GLFW_PRESS)
-    g_vec_model_scale += 0.1f;
+  if (key == GLFW_KEY_EQUAL && action == GLFW_PRESS){
+	  std::cout << "come here!" << std::endl;
+	  std::cout << g_vec_model_scale[0] << std::endl;
+          std::cout << g_vec_model_scale[1] << std::endl;
+	  std::cout << g_vec_model_scale[2] << std::endl;
+	  g_vec_model_scale[0] += 0.1f;
+	  g_vec_model_scale[1] += 0.1f;
+	  g_vec_model_scale[2] += 0.1f;
+  }
+   // g_vec_model_scale += 0.1f;
   
   // TODO
 }
