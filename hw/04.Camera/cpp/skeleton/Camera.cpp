@@ -71,7 +71,7 @@ const glm::mat4 Camera::get_projection_matrix() const {
 }
 // !
 void Camera::move_forward(float delta) {
-  std::cout << "FF Camera Position - x: " << pos.x << ", y: " << pos.y << ", z: " << pos.z << std::endl;
+  printPose();
   position_ += front_dir_ * delta;
 }
 void Camera::move_backward(float delta) {
@@ -81,7 +81,7 @@ void Camera::move_left(float delta) {
   position_ -= right_dir_ * delta;
 }
 void Camera::move_right(float delta) {
-  std::cout << "RR Camera Position - x: " << pos.x << ", y: " << pos.y << ", z: " << pos.z << std::endl;
+  printPose();
   position_ += right_dir_ * delta;
 }
 void Camera::move_up(float delta) {
@@ -89,4 +89,11 @@ void Camera::move_up(float delta) {
 }
 void Camera::move_down(float delta) {
   position_ -= up_dir_ * delta;
+}
+
+void printPose(){
+  cout << "Position: (" 
+              << position_.x << ", " 
+              << position_.y << ", " 
+              << position_.z << ")" << endl;
 }
