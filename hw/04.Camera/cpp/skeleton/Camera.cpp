@@ -1,4 +1,6 @@
 #include "Camera.h"
+#include <iostream>
+using namespace std;
 
 // TODO: fill up the following function properly 
 void Camera::set_rotation(const glm::quat& _q) {
