@@ -24,8 +24,8 @@ void Camera::set_pose(const glm::quat& _q, const glm::vec3& _t) {
 
 // FIXME
 void Camera::get_pose(glm::quat& _q, glm::vec3& _t) const {
-    set_rotation(_q);
-    position_ = _t;
+    _q = get_rotation();
+    _t = position_;
 }
 
 // FIXME
