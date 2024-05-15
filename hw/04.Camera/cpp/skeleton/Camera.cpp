@@ -1,27 +1,23 @@
 #include "Camera.h"
 
 // FIXED
-// void Camera::set_rotation(const glm::quat& _q) {
-//     glm::mat4 rot = glm::mat4_cast(_q);
-//     right_dir_ = glm::normalize(glm::vec3(rot[0]));
-//     up_dir_    = glm::normalize(glm::vec3(rot[1]));
-//     front_dir_ = glm::normalize(glm::vec3(rot[2]));
-// }
-
 void Camera::set_rotation(const glm::quat& _q) {
-    const float smooth_factor = 0.1f; // 보간에 사용될 인자, 값이 작을수록 더 부드러운 전환
-    glm::quat current_rotation = glm::quat_cast(glm::mat4(glm::vec4(right_dir_, 0.0f), 
-                                                         glm::vec4(up_dir_, 0.0f), 
-                                                         glm::vec4(-front_dir_, 0.0f), // -z for front direction
-                                                         glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)));
+    glm::mat4 rot = glm::mat4_cast(_q); // 회전 행렬로 변환
 
-    glm::quat interpolated_rotation = glm::slerp(current_rotation, _q, smooth_factor);
+    // 쿼터니언을 바탕으로 새로운 'front' 방향 벡터 계산 (기본 front 방향은 -z)
+    glm::vec3 new_front = glm::normalize(glm::vec3(rot * glm::vec4(0.0, 0.0, -1.0, 0.0)));
+    // 'up' 벡터 계산 (기본 up 방향은 y)
+    glm::vec3 new_up = glm::normalize(glm::vec3(rot * glm::vec4(0.0, 1.0, 0.0, 0.0)));
 
-    glm::mat4 rot = glm::mat4_cast(interpolated_rotation);
-    right_dir_ = glm::normalize(glm::vec3(rot[0]));
-    up_dir_    = glm::normalize(glm::vec3(rot[1]));
-    front_dir_ = glm::normalize(glm::vec3(rot[2]));
+    // glm::lookAt를 사용하여 최종 view 행렬 계산
+    glm::mat4 view = glm::lookAt(glm::vec3(0.0), new_front, new_up);
+
+    // view 행렬에서 다시 방향 벡터 추출
+    right_dir_ = glm::normalize(glm::vec3(view[0])); // view 행렬의 첫 번째 열은 right 벡터
+    up_dir_ = glm::normalize(glm::vec3(view[1])); // view 행렬의 두 번째 열은 up 벡터
+    front_dir_ = -glm::normalize(glm::vec3(view[2])); // view 행렬의 세 번째 열은 -front 벡터 (OpenGL은 right-handed 좌표계 사용)
 }
+
 
 // FIXED
 const glm::quat Camera::get_rotation() const {
