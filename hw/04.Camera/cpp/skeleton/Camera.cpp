@@ -1,6 +1,6 @@
 #include "Camera.h"
 
-// FIXME
+// FIXED
 void Camera::set_rotation(const glm::quat& _q) {
     glm::mat4 rot = glm::mat4_cast(_q);
     right_dir_ = glm::normalize(glm::vec3(rot[0]));
@@ -8,7 +8,7 @@ void Camera::set_rotation(const glm::quat& _q) {
     front_dir_ = glm::normalize(glm::vec3(rot[2]));
 }
 
-// FIXME
+// FIXED
 const glm::quat Camera::get_rotation() const {
   return glm::quat_cast(glm::mat4(glm::vec4(right_dir_, 0.0f),
                                 glm::vec4(up_dir_, 0.0f),
@@ -16,30 +16,30 @@ const glm::quat Camera::get_rotation() const {
                                 glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)));
 }
 
-// FIXME
+// FIXED
 void Camera::set_pose(const glm::quat& _q, const glm::vec3& _t) {
     set_rotation(_q);
     position_ = _t;
 }
 
-// FIXME
+// FIXED
 void Camera::get_pose(glm::quat& _q, glm::vec3& _t) const {
     _q = get_rotation();
     _t = position_;
 }
 
-// FIXME
+// FIXED
 const glm::mat4 Camera::get_pose() const {
   return glm::translate(glm::mat4(1.0f), position_) * glm::mat4_cast(get_rotation());
 }
 
-// FIXME
+// FIXED
 void Camera::set_pose(const glm::mat4& _frame) {
   position_ = glm::vec3(_frame[3]);
   set_rotation(glm::quat_cast(_frame));
 }
 
-// FIXME
+// FIXED
 void Camera::set_pose(const glm::vec3& _pos, const glm::vec3& _at, const glm::vec3& _up_dir){
   position_ = _pos; 
   front_dir_ = glm::normalize(_at - _pos);
@@ -48,13 +48,13 @@ void Camera::set_pose(const glm::vec3& _pos, const glm::vec3& _at, const glm::ve
   up_dir_ = glm::cross(right_dir_, front_dir_); // Re-calculate to ensure orthogonality
 }
 
-// FIXME
+// FIXED
 const glm::mat4 Camera::get_view_matrix() const
 {
   return glm::lookAt(position_, position_ + front_dir_, up_dir_);
 }
 
-// FIXME
+// FIXED
 const glm::mat4 Camera::get_projection_matrix() const
 {
 if (mode_ == kPerspective) {
@@ -66,7 +66,7 @@ if (mode_ == kPerspective) {
     }
 }
 
-// FIXME
+// FIXED
 void Camera::move_forward(float delta) {
   position_ += front_dir_ * delta;
 }

@@ -156,17 +156,22 @@ void compose_imgui_frame()
     ImGui::Checkbox("Perspective mode: ", &is_perspective);
     g_camera.set_mode(is_perspective ? Camera::kPerspective : Camera::kOrtho);
 
+
     if (g_camera.mode() == Camera::kPerspective)
     {
       float fovy = g_camera.fovy();
-      ImGui::SliderFloat("fovy (deg)", &fovy, 10.f, 160.f);
-      // TODO: set camera fovy
+      // FIXME : FOV 슬라이더
+      if (ImGui::SliderFloat("fovy (deg)", &fovy, 10.f, 160.f)) {
+        g_camera.set_fovy(fovy);
+      }
     }
     else
     {
       float ortho_scale = g_camera.ortho_scale();
-      ImGui::SliderFloat("ortho zoom", &ortho_scale, 0.1f, 10.f);
-      // TODO: set camera ortho_scale
+      // FIXME : Ortho 스케일 슬라이더
+      if (ImGui::SliderFloat("ortho zoom", &ortho_scale, 0.1f, 10.f)) {
+        g_camera.set_ortho_scale(ortho_scale);
+      }
     }
     ImGui::NewLine();
 
@@ -264,7 +269,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
   if (key == GLFW_KEY_MINUS && action == GLFW_PRESS)
     g_vec_model_scale -= 0.1f;
 
-  // FIXME
+  // FIXED
   // 카메라 x축 이동
   if (key == GLFW_KEY_D && action == GLFW_PRESS) 
     g_camera.move_right(0.1f);
