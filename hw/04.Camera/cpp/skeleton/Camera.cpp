@@ -1,8 +1,23 @@
 #include "Camera.h"
 
 // FIXED
+// void Camera::set_rotation(const glm::quat& _q) {
+//     glm::mat4 rot = glm::mat4_cast(_q);
+//     right_dir_ = glm::normalize(glm::vec3(rot[0]));
+//     up_dir_    = glm::normalize(glm::vec3(rot[1]));
+//     front_dir_ = glm::normalize(glm::vec3(rot[2]));
+// }
+
 void Camera::set_rotation(const glm::quat& _q) {
-    glm::mat4 rot = glm::mat4_cast(_q);
+    const float smooth_factor = 0.1f; // 보간에 사용될 인자, 값이 작을수록 더 부드러운 전환
+    glm::quat current_rotation = glm::quat_cast(glm::mat4(glm::vec4(right_dir_, 0.0f), 
+                                                         glm::vec4(up_dir_, 0.0f), 
+                                                         glm::vec4(-front_dir_, 0.0f), // -z for front direction
+                                                         glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)));
+
+    glm::quat interpolated_rotation = glm::slerp(current_rotation, _q, smooth_factor);
+
+    glm::mat4 rot = glm::mat4_cast(interpolated_rotation);
     right_dir_ = glm::normalize(glm::vec3(rot[0]));
     up_dir_    = glm::normalize(glm::vec3(rot[1]));
     front_dir_ = glm::normalize(glm::vec3(rot[2]));
