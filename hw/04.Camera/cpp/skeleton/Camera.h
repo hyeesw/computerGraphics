@@ -54,12 +54,14 @@ public:
   Camera::Mode mode() const                  { return mode_; }
   void  set_mode(Camera::Mode _mode)         { mode_ = _mode; }
 
-// 카메라 초기화
 private:
 	// position of the camera
   glm::vec3  position_ = glm::vec3(0.0f, 0.0f, 0.5f);
+  // front direction of the camera    (it should be a unit vector whose length is 1)      
   glm::vec3  front_dir_ = glm::vec3(0.0f, 0.0f, -1.0f);
+  // up direction of the camera       (it should be a unit vector whose length is 1)   
   glm::vec3  up_dir_ = glm::vec3(0.0f, 1.0f, 0.0f);
+  // right direction of the camera    (it should be a unit vector whose length is 1)
   glm::vec3  right_dir_ = glm::vec3(1.0f, 0.0f, 0.0f);
 
   Mode  mode_ = kOrtho;

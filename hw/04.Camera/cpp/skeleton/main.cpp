@@ -25,8 +25,6 @@
 
 #include "Camera.h"
 
-using namespace std;
-
 ////////////////////////////////////////////////////////////////////////////////
 /// 쉐이더 관련 변수 및 함수
 ////////////////////////////////////////////////////////////////////////////////
@@ -162,19 +160,19 @@ void compose_imgui_frame()
     {
       float fovy = g_camera.fovy();
       ImGui::SliderFloat("fovy (deg)", &fovy, 10.f, 160.f);
-      // TODO: set camera fovy (시야각)
+      // TODO: set camera fovy
     }
     else
     {
       float ortho_scale = g_camera.ortho_scale();
       ImGui::SliderFloat("ortho zoom", &ortho_scale, 0.1f, 10.f);
-      // TODO 4 : set camera ortho_scale
+      // TODO: set camera ortho_scale
     }
     ImGui::NewLine();
 
     ImGui::Text("Extrinsic Parameters");
 
-    // TODO 1, 2 (카메라 x, y 축 방향 이동 키보드 조작)
+    // TODO
     glm::quat   quat_cam;
     glm::vec3   vec_cam_pos;
 
@@ -242,7 +240,7 @@ void compose_imgui_frame()
 
 void scroll_callback(GLFWwindow* window, double x, double y)
 {
-  // TODO (추가점수 6)
+  // TODO
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -266,18 +264,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
   if (key == GLFW_KEY_MINUS && action == GLFW_PRESS)
     g_vec_model_scale -= 0.1f;
 
-  // TODO: (1, 2 키보드 조작) update camera extrinsic parameter with key-inputs
-  // D, A 키를 통해 카메라를 x축 방향으로 이동
-  if (key == GLFW_KEY_D && action == GLFW_PRESS)
-    g_camera.move_right(0.1f);
-  if (key == GLFW_KEY_A && action == GLFW_PRESS)
-    g_camera.move_left(0.1f);
-
-  // S, W 키를 통해 카메라를 z축 방향으로 이동
-  if (key == GLFW_KEY_W && action == GLFW_PRESS)
-    g_camera.move_forward(0.1f);
-  if (key == GLFW_KEY_S && action == GLFW_PRESS)
-    g_camera.move_backward(0.1f);
+  // TODO: update camera extrinsic parameter with key-inputs
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
@@ -494,7 +481,7 @@ int main(void)
 
   glfwSetKeyCallback(window, key_callback);
   glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-  // TODO: 6 register scroll_callback function
+  // TODO: register scroll_callback function
 
 
   init_scene();
