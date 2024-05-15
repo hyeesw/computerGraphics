@@ -54,6 +54,7 @@ public:
   Camera::Mode mode() const                  { return mode_; }
   void  set_mode(Camera::Mode _mode)         { mode_ = _mode; }
 
+// ! 카메라 초기화
 private:
 	// position of the camera
   glm::vec3  position_ = glm::vec3(0.0f, 0.0f, 0.5f);

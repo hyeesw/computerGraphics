@@ -269,13 +269,13 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
   if (key == GLFW_KEY_D && action == GLFW_PRESS)
     g_camera.move_right(0.1f);
   if (key == GLFW_KEY_A && action == GLFW_PRESS)
-    g_camera.move_right(-0.1f);
+    g_camera.move_left(0.1f);
 
   // S, W 키를 통해 카메라를 z축 방향으로 이동
   if (key == GLFW_KEY_W && action == GLFW_PRESS)
     g_camera.move_forward(0.1f);
   if (key == GLFW_KEY_S && action == GLFW_PRESS)
-    g_camera.move_forward(-0.1f);
+    g_camera.move_backward(0.1f);
 }
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
