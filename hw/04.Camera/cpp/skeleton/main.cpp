@@ -160,7 +160,7 @@ void compose_imgui_frame()
     if (g_camera.mode() == Camera::kPerspective)
     {
       float fovy = g_camera.fovy();
-      // FIXME : FOV 슬라이더
+      // FIXED : FOV 슬라이더
       if (ImGui::SliderFloat("fovy (deg)", &fovy, 10.f, 160.f)) {
         g_camera.set_fovy(fovy);
       }
@@ -168,7 +168,7 @@ void compose_imgui_frame()
     else
     {
       float ortho_scale = g_camera.ortho_scale();
-      // FIXME : Ortho 스케일 슬라이더
+      // FIXED : Ortho 스케일 슬라이더??
       if (ImGui::SliderFloat("ortho zoom", &ortho_scale, 0.1f, 10.f)) {
         g_camera.set_ortho_scale(ortho_scale);
       }
@@ -177,12 +177,16 @@ void compose_imgui_frame()
 
     ImGui::Text("Extrinsic Parameters");
 
-    // TODO
-    glm::quat   quat_cam;
-    glm::vec3   vec_cam_pos;
+    // FIXME 현재 카메라 위치 및 회전 가져오기
+    glm::quat quat_cam = g_camera.get_rotation();
+    glm::vec3 vec_cam_pos = g_camera.position();
 
-    ImGui::SliderFloat3("Tranlsate", glm::value_ptr(vec_cam_pos), -10.0f, 10.0f);
-    ImGui::gizmo3D("Rotation", quat_cam);
+    if(ImGui::SliderFloat3("Tranlsate", glm::value_ptr(vec_cam_pos), -10.0f, 10.0f)){
+      g_camera.set_position(vec_cam_pos);
+    }
+    if(ImGui::gizmo3D("Rotation", quat_cam)){
+      g_camera.set_rotation(quat_cam);
+    }
 
     ImGui::End();
   }
