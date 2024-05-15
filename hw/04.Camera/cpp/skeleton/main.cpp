@@ -177,21 +177,15 @@ void compose_imgui_frame()
 
     ImGui::Text("Extrinsic Parameters");
 
-    // FIXME 현재 카메라 위치 및 회전 가져오기
-    glm::quat prev_quat_cam = g_camera.get_rotation();
-    glm::quat quat_cam = prev_quat_cam;  // quat_cam 초기화
+    // 현재 카메라 위치 및 회전 가져오기
+    glm::quat quat_cam = g_camera.get_rotation();
     glm::vec3 vec_cam_pos = g_camera.position();
 
     if(ImGui::SliderFloat3("Tranlsate", glm::value_ptr(vec_cam_pos), -10.0f, 10.0f)){
       g_camera.set_position(vec_cam_pos);
     }
-    if (ImGui::gizmo3D("Rotation", quat_cam)) {
-      glm::quat delta_quat = quat_cam * glm::inverse(prev_quat_cam); // 델타 회전 계산
-      float rotation_scale = 0.5f; // 델타 회전 스케일링 (회전 민감도 감소)
-      delta_quat = glm::slerp(glm::quat(), delta_quat, rotation_scale);
-      // 최종 회전 적용
-      glm::quat final_quat = delta_quat * prev_quat_cam;
-      g_camera.set_rotation(final_quat);
+    if(ImGui::gizmo3D("Rotation", quat_cam)){
+      g_camera.set_rotation(quat_cam);
     }
 
     ImGui::End();
