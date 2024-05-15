@@ -3,11 +3,11 @@
 // FIXME
 void Camera::set_rotation(const glm::quat& _q) {
     // front direction을 쿼터니언을 이용해 회전
-    front_dir_ = glm::rotate(_q, glm::vec3(0.0f, 0.0f, -1.0f));
+    front_dir_ = glm::rotate(glm::mat4(1.0f), _q, glm::vec3(0.0f, 0.0f, -1.0f));
     // up direction을 쿼터니언을 이용해 회전
-    up_dir_ = glm::rotate(_q, glm::vec3(0.0f, 1.0f, 0.0f));
+    up_dir_ = glm::rotate(glm::mat4(1.0f), _q, glm::vec3(0.0f, 1.0f, 0.0f));
     // right direction은 front와 up의 외적을 이용해 계산
-    right_dir_ = glm::normalize(glm::cross(front_dir_, up_dir_));
+    right_dir_ = glm::normalize(glm::mat4(1.0f), glm::cross(front_dir_, up_dir_));
 }
 
 // FIXED
