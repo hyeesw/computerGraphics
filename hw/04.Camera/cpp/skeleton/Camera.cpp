@@ -67,22 +67,22 @@ const glm::mat4 Camera::get_projection_matrix() const {
 
   return glm::mat4(1.0f);
 }
-
+// !
 void Camera::move_forward(float delta) {
-  position_ += front_ * delta;
+  position_ += front_dir_ * delta;
 }
 void Camera::move_backward(float delta) {
-  position_ -= front_ * delta;
+  position_ -= front_dir_ * delta;
 }
 void Camera::move_left(float delta) {
-  position_ -= right_ * delta;
+  position_ -= right_dir_ * delta;
 }
 void Camera::move_right(float delta) {
-  position_ += right_ * delta;
+  position_ += right_dir_ * delta;
 }
 void Camera::move_up(float delta) {
-  position_ += up_ * delta;
+  position_ += up_dir_ * delta;
 }
 void Camera::move_down(float delta) {
-  position_ -= up_ * delta;
+  position_ -= up_dir_ * delta;
 }
