@@ -1,113 +1,87 @@
 #include "Camera.h"
 
-// TODO: fill up the following function properly 
-void Camera::set_rotation(const glm::quat& _q)
-{
-
+// FIXME
+void Camera::set_rotation(const glm::quat& _q) {
+    glm::mat4 rot = glm::mat4_cast(_q);
+    right_dir_ = glm::normalize(glm::vec3(rot[0]));
+    up_dir_    = glm::normalize(glm::vec3(rot[1]));
+    front_dir_ = glm::normalize(glm::vec3(rot[2]));
 }
 
-// TODO: re-write the following function properly 
-const glm::quat Camera::get_rotation() const
-{
-  return glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+// FIXME
+const glm::quat Camera::get_rotation() const {
+  return glm::quat_cast(glm::mat4(glm::vec4(right_dir_, 0.0f),
+                                glm::vec4(up_dir_, 0.0f),
+                                glm::vec4(-front_dir_, 0.0f), // -z for front direction
+                                glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)));
 }
 
-// TODO: fill up the following function properly 
-void Camera::set_pose(const glm::quat& _q, const glm::vec3& _t)
-{
-
+// FIXME
+void Camera::set_pose(const glm::quat& _q, const glm::vec3& _t) {
+    set_rotation(_q);
+    position_ = _t;
 }
 
-// TODO: fill up the following function properly 
-void Camera::get_pose(glm::quat& _q, glm::vec3& _t) const
-{
-
+// FIXME
+void Camera::get_pose(glm::quat& _q, glm::vec3& _t) const {
+    set_rotation(_q);
+    position_ = _t;
 }
 
-// TODO: rewrite the following function properly 
-const glm::mat4 Camera::get_pose() const
-{
-  return  glm::mat4(1.0f);
+// FIXME
+const glm::mat4 Camera::get_pose() const {
+  return glm::translate(glm::mat4(1.0f), position_) * glm::mat4_cast(get_rotation());
 }
 
-// TODO: fill up the following function properly 
-void Camera::set_pose(const glm::mat4& _frame)
-{
-  // +x_cam: right direction of the camera    (it should be a unit vector whose length is 1)
-  // right_dir_ = ..... ; // +x
-  // +y_cam: up direction of the camera       (it should be a unit vector whose length is 1)   
-  // up_dir_    = ..... ;    // +y
-  // -z_cam: front direction of the camera    (it should be a unit vector whose length is 1)
-  // front_dir_ = ..... ;    // -z
-  // pos_cam: position of the camera
-  // position_  = ..... ;    // pos
+// FIXME
+void Camera::set_pose(const glm::mat4& _frame) {
+  position_ = glm::vec3(_frame[3]);
+  set_rotation(glm::quat_cast(_frame));
 }
 
-// TODO: fill up the following function properly 
-void Camera::set_pose(const glm::vec3& _pos, const glm::vec3& _at, const glm::vec3& _up_dir)
-{
-  // up_dir_    = ..... ;
-  // front_dir_ = ..... ;    // -z_cam direction
-  // right_dir_ = ..... ;    // +x_cam direction
-  // up_dir_    = ..... ;    // +y_cam direction
-
-  // position_  = ..... ;      // pos
+// FIXME
+void Camera::set_pose(const glm::vec3& _pos, const glm::vec3& _at, const glm::vec3& _up_dir){
+  position_ = _pos; 
+  front_dir_ = glm::normalize(_at - _pos);
+  up_dir_    = glm::normalize(_up_dir);
+  right_dir_ = glm::normalize(glm::cross(front_dir_, up_dir_));
+  up_dir_ = glm::cross(right_dir_, front_dir_); // Re-calculate to ensure orthogonality
 }
 
-// TODO: rewrite the following function properly 
+// FIXME
 const glm::mat4 Camera::get_view_matrix() const
 {
-  return glm::mat4(1.0f);
+  return glm::lookAt(position_, position_ + front_dir_, up_dir_);
 }
 
-// TODO: rewrite the following function properly 
+// FIXME
 const glm::mat4 Camera::get_projection_matrix() const
 {
-  // TODO: Considering the followings,
-  //       You must return a proper projection matrix
-  //       i) camera mode: it can be either kOrtho or kPerspective
-  //       ii) zoom-in/-out: if the camera mode is kOrtho, 
-  //                         utilize ortho_scale_ for zoom-in/-out
-  //                         if the camera mode is kPerspective,
-  //                         utilize fovy_ for zoom-in/-out
-  //       iii) aspect ratio: utilize aspect_ in the both camera modes
-  //       iv) near/far clipping planes: utilize near_, far_
-
-  return glm::mat4(1.0f);
+if (mode_ == kPerspective) {
+        return glm::perspective(glm::radians(fovy_), aspect_, near_, far_);
+    } else { // kOrtho
+        float ortho_half_height = ortho_scale_ * aspect_;
+        float ortho_half_width = ortho_scale_;
+        return glm::ortho(-ortho_half_width, ortho_half_width, -ortho_half_height, ortho_half_height, near_, far_);
+    }
 }
 
-// TODO: fill up the following functions properly 
-void Camera::move_forward(float delta)
-{
-
+// FIXME
+void Camera::move_forward(float delta) {
+  position_ += front_dir_ * delta;
 }
-
-// TODO: fill up the following functions properly 
-void Camera::move_backward(float delta)
-{
-
+void Camera::move_backward(float delta){
+  position_ -= front_dir_ * delta;
 }
-
-// TODO: fill up the following functions properly 
-void Camera::move_left(float delta)
-{
-
+void Camera::move_left(float delta) {
+  position_ -= right_dir_ * delta;
 }
-
-// TODO: fill up the following functions properly 
-void Camera::move_right(float delta)
-{
-
+void Camera::move_right(float delta){
+  position_ += right_dir_ * delta;
 }
-
-// TODO: fill up the following functions properly 
-void Camera::move_up(float delta)
-{
-
+void Camera::move_up(float delta){
+  position_ += up_dir_ * delta;
 }
-
-// TODO: fill up the following functions properly 
-void Camera::move_down(float delta)
-{
-
+void Camera::move_down(float delta){
+  position_ -= up_dir_ * delta;
 }
