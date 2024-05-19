@@ -306,8 +306,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 // FIXME 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-    float aspect_ratio = static_cast<float>(width) / static_cast<float>(height);
-    g_camera.set_aspect(aspect_ratio);
+    g_camera.set_aspect((float)width / (float)height);
     glViewport(0, 0, width, height);
 }
 
