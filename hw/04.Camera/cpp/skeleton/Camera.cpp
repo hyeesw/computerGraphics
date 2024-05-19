@@ -1,6 +1,6 @@
 #include "Camera.h"
 
-// FIXME
+// FIXED
 void Camera::set_rotation(const glm::quat& _q) {
     // input 쿼터니언을 이용해 회전 행렬을 만든다
     glm::mat4 rotation_matrix = glm::mat4_cast(_q);
