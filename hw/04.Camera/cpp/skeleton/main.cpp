@@ -249,12 +249,22 @@ void compose_imgui_frame()
 
 // FIXME : 스크롤 event
 void scroll_callback(GLFWwindow* window, double x, double y) {
-  float fovy = g_camera.fovy();
-  // 스크롤 방향에 따라 fovy 값을 증가 또는 감소
-  fovy -= static_cast<float>(y); // 스크롤 위: yoffset > 0, 아래: yoffset < 0
-  if (fovy < 10.f) fovy = 10.f;        // 최소 FOV 제한
-  if (fovy > 160.f) fovy = 160.f;      // 최대 FOV 제한
-  g_camera.set_fovy(fovy);
+  if (g_camera.mode() == Camera::kPerspective) {
+      float fovy = g_camera.fovy();
+      // 스크롤 방향에 따라 fovy 값을 증가 또는 감소
+      fovy -= static_cast<float>(y); // 스크롤 위: yoffset > 0, 아래: yoffset < 0
+      if (fovy < 10.f) fovy = 10.f;        // 최소 FOV 제한
+      if (fovy > 160.f) fovy = 160.f;      // 최대 FOV 제한
+      g_camera.set_fovy(fovy);
+  }
+  else if (g_camera.mode() == Camera::kOrtho) {
+      float ortho_scale = g_camera.ortho_scale();
+      // 스크롤 방향에 따라 ortho_scale 값을 증가 또는 감소
+      ortho_scale -= static_cast<float>(y) * 0.1f; // 스크롤 위: yoffset > 0, 아래: yoffset < 0
+      if (ortho_scale < 0.1f) ortho_scale = 0.1f;  // 최소 스케일 제한
+      g_camera.set_ortho_scale(ortho_scale);
+  }
+
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
