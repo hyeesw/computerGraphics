@@ -2,20 +2,26 @@
 
 // FIXME
 void Camera::set_rotation(const glm::quat& _q) {
-    // front direction을 쿼터니언을 이용해 회전
-    front_dir_ = glm::rotate(glm::mat4(1.0f), _q, glm::vec3(0.0f, 0.0f, -1.0f));
-    // up direction을 쿼터니언을 이용해 회전
-    up_dir_ = glm::rotate(glm::mat4(1.0f), _q, glm::vec3(0.0f, 1.0f, 0.0f));
-    // right direction은 front와 up의 외적을 이용해 계산
-    right_dir_ = glm::normalize(glm::mat4(1.0f), glm::cross(front_dir_, up_dir_));
+    // input 쿼터니언을 이용해 회전 행렬을 만든다
+    glm::mat4 rotation_matrix = glm::toMat4(_q);
+
+    // 회전 행렬을 이용해 front, up, right 방향을 계산한다
+    front_dir_ = glm::normalize(glm::vec3(rotation_matrix * glm::vec4(0.0f, 0.0f, -1.0f, 0.0f)));
+    up_dir_ = glm::normalize(glm::vec3(rotation_matrix * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f)));
+    right_dir_ = glm::normalize(glm::vec3(rotation_matrix * glm::vec4(1.0f, 0.0f, 0.0f, 0.0f)));
 }
 
 // FIXED
 const glm::quat Camera::get_rotation() const {
-  return glm::quat_cast(glm::mat4(glm::vec4(right_dir_, 0.0f),
-                                glm::vec4(up_dir_, 0.0f),
-                                glm::vec4(-front_dir_, 0.0f), // -z for front direction
-                                glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)));
+    // 방향 벡터를 이용해 회전행렬을 만든다
+    glm::mat4 rotation_matrix(
+        glm::vec4(right_dir_, 0.0f),
+        glm::vec4(up_dir_, 0.0f),
+        glm::vec4(-front_dir_, 0.0f), // front_dir은 -z 방향
+        glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)
+    );
+
+    return glm::quat_cast(rotation_matrix); //회전행렬을 쿼터니언으로 변환
 }
 
 // FIXED

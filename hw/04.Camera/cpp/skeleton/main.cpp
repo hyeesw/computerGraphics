@@ -177,13 +177,12 @@ void compose_imgui_frame()
 
     ImGui::Text("Extrinsic Parameters");
 
-    // 현재 카메라 위치 및 회전 가져오기
-    glm::quat quat_cam = g_camera.get_rotation();
     glm::vec3 vec_cam_pos = g_camera.position();
-
     if(ImGui::SliderFloat3("Tranlsate", glm::value_ptr(vec_cam_pos), -10.0f, 10.0f)){
       g_camera.set_position(vec_cam_pos);
     }
+    // FIXME 현재 카메라 회전 가져오기
+    glm::quat quat_cam = g_camera.get_rotation();
     if(ImGui::gizmo3D("Rotation", quat_cam)){
       g_camera.set_rotation(quat_cam);
     }
