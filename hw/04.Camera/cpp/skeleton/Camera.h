@@ -47,7 +47,8 @@ public:
 
   const float ortho_scale() const            { return ortho_scale_; }
   void  set_ortho_scale(float _ortho_scale)  { ortho_scale_ = _ortho_scale; }
-
+  
+  // window 화면 비율 (width / height)
   const float aspect() const                 { return aspect_; }
   void  set_aspect(float _aspect)            { aspect_ = _aspect; }
 

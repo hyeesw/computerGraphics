@@ -303,10 +303,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 }
 
+// FIXME 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-  g_camera.set_aspect((float) width / (float) height);
-  glViewport(0, 0, width, height);
+    float aspect_ratio = static_cast<float>(width) / static_cast<float>(height);
+    g_camera.set_aspect(aspect_ratio);
+    glViewport(0, 0, width, height);
 }
 
 // GLSL 파일을 읽어서 컴파일한 후 쉐이더 객체를 생성하는 함수
@@ -516,8 +518,9 @@ int main(void)
   init_buffer_objects();
 
   glfwSetKeyCallback(window, key_callback);
+  // FIXME : 화면 종횡비
   glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-  // FIXME: register scroll_callback function
+  // FIXED: register scroll_callback function
   glfwSetScrollCallback(window, scroll_callback);
 
   init_scene();
