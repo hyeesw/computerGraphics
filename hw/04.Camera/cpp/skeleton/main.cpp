@@ -253,8 +253,8 @@ void scroll_callback(GLFWwindow* window, double x, double y) {
       float fovy = g_camera.fovy();
       // 스크롤 방향에 따라 fovy 값을 증가 또는 감소
       fovy -= static_cast<float>(y); // 스크롤 위: yoffset > 0, 아래: yoffset < 0
-      // if (fovy < 10.f) fovy = 10.f;        // 최소 FOV 제한
-      // if (fovy > 160.f) fovy = 160.f;      // 최대 FOV 제한
+      if (fovy < 10.f) fovy = 10.f;        // 최소 FOV 제한
+      if (fovy > 160.f) fovy = 160.f;      // 최대 FOV 제한
       g_camera.set_fovy(fovy);
   }
 }
