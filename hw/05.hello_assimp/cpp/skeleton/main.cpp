@@ -497,21 +497,40 @@ void render_scene()
   // set transform
   const Camera& camera = g_cameras[g_cam_select_idx];
 
-  // TODO : set transform using the current camera
-  mat_view = glm::mat4(1.0f); // <- TODO
-  mat_proj = glm::mat4(1.0f); // <- TODO
+  mat_view = camera.get_view_matrix();
+  mat_proj = camera.get_projection_matrix();
 
   // 특정 쉐이더 프로그램 사용
   glUseProgram(program);
 
   for (std::size_t i = 0; i < g_objects.size(); ++i)
   {
-    // TODO : draw each object
+    const Object& object = g_objects[i];
+    
+    mat_model = object.get_model_matrix();
+    mat_PVM = mat_proj * mat_view * mat_model;
+
+    glUniformMatrix4fv(loc_u_PVM, 1, GL_FALSE, glm::value_ptr(mat_PVM));
+
+    glBindBuffer(GL_ARRAY_BUFFER, object.get_position_buffer());
+    glVertexAttribPointer(loc_a_position, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(loc_a_position);
+
+    glBindBuffer(GL_ARRAY_BUFFER, object.get_color_buffer());
+    glVertexAttribPointer(loc_a_color, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(loc_a_color);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, object.get_index_buffer());
+    glDrawElements(GL_TRIANGLES, object.get_num_indices(), GL_UNSIGNED_INT, 0);
+
+    glDisableVertexAttribArray(loc_a_position);
+    glDisableVertexAttribArray(loc_a_color);
   }
 
   // 쉐이더 프로그램 사용해제
   glUseProgram(0);
 }
+
 
 void render(GLFWwindow* window) 
 {
