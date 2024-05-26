@@ -10,9 +10,21 @@ void Object::init_buffer_objects()
     if (pmesh_->HasVertexColors(0))
     {
         is_color = true;
+        std::vector<GLfloat> colors;
+        colors.reserve(pmesh_->mNumVertices * 3); // assuming RGB colors
+
+        for (unsigned int i = 0; i < pmesh_->mNumVertices; ++i)
+        {
+            aiColor4D color = pmesh_->mColors[0][i];
+            colors.push_back(color.r);
+            colors.push_back(color.g);
+            colors.push_back(color.b);
+            // You can also include alpha channel if needed
+        }
+
         glGenBuffers(1, &color_buffer);
         glBindBuffer(GL_ARRAY_BUFFER, color_buffer);
-        glBufferData(GL_ARRAY_BUFFER, pmesh_->mNumVertices * 3 * sizeof(float), pmesh_->mColors[0], GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(GLfloat), colors.data(), GL_STATIC_DRAW);
     }
 
     for (unsigned int i = 0; i < pmesh_->mNumFaces; ++i)
