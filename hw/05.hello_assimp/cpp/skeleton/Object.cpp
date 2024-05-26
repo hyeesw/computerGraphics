@@ -1,7 +1,8 @@
 #include "Object.h"
 
 void Object::init_buffer_objects() 
-{
+{   
+    //FIXED
     // Create buffers
     glGenBuffers(1, &position_buffer);
     glBindBuffer(GL_ARRAY_BUFFER, position_buffer);
@@ -11,7 +12,7 @@ void Object::init_buffer_objects()
     {
         is_color = true;
         std::vector<GLfloat> colors;
-        colors.reserve(pmesh_->mNumVertices * 3); // assuming RGB colors
+        colors.reserve(pmesh_->mNumVertices * 3); // RGB
 
         for (unsigned int i = 0; i < pmesh_->mNumVertices; ++i)
         {
@@ -19,7 +20,6 @@ void Object::init_buffer_objects()
             colors.push_back(color.r);
             colors.push_back(color.g);
             colors.push_back(color.b);
-            // You can also include alpha channel if needed
         }
 
         glGenBuffers(1, &color_buffer);
@@ -45,6 +45,7 @@ glm::mat4 Object::get_model_matrix() const
 {
     glm::mat4 mat_model = glm::mat4(1.0f);
 
+    //FIXED
     mat_model = glm::translate(mat_model, vec_translate_);
     mat_model *= glm::mat4_cast(quat_rotate_);
     mat_model = glm::scale(mat_model, vec_scale_);
@@ -54,12 +55,13 @@ glm::mat4 Object::get_model_matrix() const
 
 void Object::draw(int loc_a_position, int loc_a_color)
 {
+    //FIXED
     // Bind position buffer
     glBindBuffer(GL_ARRAY_BUFFER, position_buffer);
     glVertexAttribPointer(loc_a_position, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(loc_a_position);
 
-    // Bind color buffer if available
+    // Bind color buffer
     if (is_color)
     {
         glBindBuffer(GL_ARRAY_BUFFER, color_buffer);

@@ -285,9 +285,7 @@ void init_imgui(GLFWwindow* window)
 
 
 bool load_asset(const std::string& filename)
-{
-  // TODO : Assimp를 이용하여 filename에 해당하는 모델 파일을 로드하고, g_objects에 추가하는 함수를 작성하시오.
-  
+{ 
   const aiScene* curr_scene = aiImportFile(filename.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
   if (curr_scene != NULL)
   {
@@ -496,7 +494,7 @@ void render_scene()
 
   // set transform
   const Camera& camera = g_cameras[g_cam_select_idx];
-
+  // FIXED
   mat_view = camera.get_view_matrix();
   mat_proj = camera.get_projection_matrix();
 
@@ -505,6 +503,7 @@ void render_scene()
 
   for (std::size_t i = 0; i < g_objects.size(); ++i)
   {
+    //FIXED
     Object& object = g_objects[i];
     
     mat_model = object.get_model_matrix();
