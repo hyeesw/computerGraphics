@@ -588,8 +588,8 @@ void render_object()
     Model& model = g_models[i];
   
     // FIXED : : set mat_model, mat_normal, mat_PVM
-    glm::mat_model = model.get_model_matrix();
-    glm::mat_PVM = mat_proj * mat_view * mat_model;
+    glm::mat4 mat_model = model.get_model_matrix();
+    glm::mat4 mat_PVM = mat_proj * mat_view * mat_model;
 
     // FIXED : send uniform data for model to GPU
     glUniformMatrix4fv(loc_u_PVM, 1, GL_FALSE, glm::value_ptr(mat_PVM));    
