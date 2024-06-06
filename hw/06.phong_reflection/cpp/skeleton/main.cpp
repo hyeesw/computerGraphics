@@ -546,7 +546,12 @@ void init_shader_program()
   loc_u_light_ambient = glGetUniformLocation(program, "u_light_ambient");
   loc_u_light_diffuse = glGetUniformLocation(program, "u_light_diffuse");
   loc_u_light_specular = glGetUniformLocation(program, "u_light_specular");
-  // loc_u_model_matrix = glGetUniformLocation(program, "u_model_matrix");
+  loc_u_model_matrix = glGetUniformLocation(program, "u_model_matrix");
+  loc_u_normal_matrix = glGetUniformLocation(program, "u_normal_matrix");
+  loc_u_obj_ambient = glGetUniformLocation(program, "u_obj_ambient");
+  loc_u_obj_diffuse = glGetUniformLocation(program, "u_obj_diffuse");
+  loc_u_obj_specular = glGetUniformLocation(program, "u_obj_specular");
+  loc_u_obj_shininess = glGetUniformLocation(program, "u_obj_shininess");
 }
 
 void render_object()
@@ -556,7 +561,6 @@ void render_object()
   // set transform
   glm::mat4 mat_view = camera.get_view_matrix();
   glm::mat4 mat_proj = camera.get_projection_matrix();
-
 
   // 특정 쉐이더 프로그램 사용
   glUseProgram(program); // shader 프로그램으로 색 계산
