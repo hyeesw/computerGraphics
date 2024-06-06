@@ -88,7 +88,7 @@ std::vector<Model> g_models;
 Light g_light;
 
 bool load_asset(const std::string& filename);
-// void init_buffer_objects();     // VBO init 함수: GPU의 VBO를 초기화하는 함수.
+void init_buffer_objects();     // VBO init 함수: GPU의 VBO를 초기화하는 함수.
 void render_object();           // rendering 함수: 물체(삼각형)를 렌더링하는 함수.
 void render(GLFWwindow* window);
 ////////////////////////////////////////////////////////////////////////////////
