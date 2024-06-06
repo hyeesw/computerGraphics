@@ -563,7 +563,7 @@ void render_object()
   glUseProgram(program);
 
   glUniformMatrix4fv(loc_u_view_matrix, 1, GL_FALSE, glm::value_ptr(mat_view));
-  glm::vec3 camera_position = camera.get_position();
+  glm::vec3 camera_position = camera.get_pose();
   glUniform3fv(loc_u_camera_position, 1, glm::value_ptr(camera_position));
 
   glUniform3fv(loc_u_light_position, 1, glm::value_ptr(g_light.pos));
