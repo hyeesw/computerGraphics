@@ -560,6 +560,28 @@ void render_object()
   glUseProgram(program);
 
   // TODO : send uniform for camera & light to GPU
+  // vec3 color = vec3(0.0); //color 벡터 초기화
+	// vec3 normal_wc = normalize(v_normal_wc); //world 좌표계의 법선 벡터 크기 1로 만들기 (방향만 필요하므로)
+	// vec3 light_dir = normalize(loc_u_light_position); //빛 위치 받아오기
+
+	// // ambient 계산: (Ka*La)
+	// color += (loc_u_light_ambient * loc_u_obj_ambient); 
+
+	// // diffuse 계산: Kd*max((l*n), 0) * Ld
+	// float ndotl = max(dot(normal_wc, light_dir), 0.0); 
+	// color += (ndotl * loc_u_light_diffuse * loc_u_obj_diffuse);
+
+	// // specular 계산: Ks * max((r*v)^a, 0) * Ls
+	// vec3 view_dir = normalize(loc_u_camera_position - v_position_wc); // v
+	// vec3 reflect_dir = reflect(-light_dir, normal_wc); // r
+	// float rdotv = max(dot(view_dir, reflect_dir), 0.0);
+	// color += (pow(rdotv, loc_u_obj_shininess) * loc_u_light_specular * loc_u_obj_specular);
+
+  glUniform3fv(loc_u_camera_position, 1, glm::value_ptr(camera.position()));
+  glUniform3fv(loc_u_light_position, 1, glm::value_ptr(g_light.pos));
+  glUniform3fv(loc_u_light_ambient, 1, glm::value_ptr(g_light.ambient));
+  glUniform3fv(loc_u_light_diffuse, 1, glm::value_ptr(g_light.diffuse));
+  glUniform3fv(loc_u_light_specular, 1, glm::value_ptr(g_light.specular));
 
   for (std::size_t i = 0; i < g_models.size(); ++i)
   {
