@@ -88,7 +88,6 @@ std::vector<Model> g_models;
 Light g_light;
 
 bool load_asset(const std::string& filename);
-// void init_buffer_objects();     // VBO init 함수: GPU의 VBO를 초기화하는 함수.
 void render_object();           // rendering 함수: 물체(삼각형)를 렌더링하는 함수.
 void render(GLFWwindow* window);
 ////////////////////////////////////////////////////////////////////////////////
@@ -204,8 +203,6 @@ void init_window(GLFWwindow* window)
   init_shader_program();
 
   glEnable(GL_DEPTH_TEST);
-
-  // init_buffer_objects();
 
   glfwSetKeyCallback(window, key_callback);
   glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
@@ -542,9 +539,14 @@ void init_shader_program()
   loc_a_position = glGetAttribLocation(program, "a_position");
   loc_a_color = glGetAttribLocation(program, "a_color");
 
-  // TODO: get locations of the GPU uniform/attribute variables 
+  // FIXED: get locations of the GPU uniform/attribute variables 
   //       for implementing Phong reflection model
-
+  loc_u_camera_position = glGetUniformLocation(program, "u_camera_position");
+  loc_u_light_position = glGetUniformLocation(program, "u_light_position");
+  loc_u_light_ambient = glGetUniformLocation(program, "u_light_ambient");
+  loc_u_light_diffuse = glGetUniformLocation(program, "u_light_diffuse");
+  loc_u_light_specular = glGetUniformLocation(program, "u_light_specular");
+  // loc_u_model_matrix = glGetUniformLocation(program, "u_model_matrix");
 }
 
 void render_object()
