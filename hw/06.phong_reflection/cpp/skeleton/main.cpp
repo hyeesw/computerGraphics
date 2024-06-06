@@ -54,22 +54,22 @@ GLint   loc_a_position;   // attribute 변수 a_position 위치
 GLint   loc_a_color;      // attribute 변수 a_color 위치
 GLint   loc_u_PVM;        // uniform 변수 u_PVM 위치
 
-GLint   loc_u_view_matrix;
+GLint   loc_u_view_matrix; // view matrix
 GLint   loc_u_model_matrix;
 GLint   loc_u_normal_matrix;
 
-GLint   loc_u_camera_position;
-GLint   loc_u_light_position;
+GLint   loc_u_camera_position; // 카메라 위치
+GLint   loc_u_light_position; //광원 위치
 
-GLint   loc_u_light_ambient;
-GLint   loc_u_light_diffuse;
-GLint   loc_u_light_specular;
+GLint   loc_u_light_ambient; //La
+GLint   loc_u_light_diffuse; //Lb
+GLint   loc_u_light_specular; //Ls
 
-GLint   loc_u_obj_ambient;
-GLint   loc_u_obj_diffuse;
-GLint   loc_u_obj_specular;
-GLint   loc_u_obj_shininess;
-GLint   loc_a_normal;
+GLint   loc_u_obj_ambient; //Ka
+GLint   loc_u_obj_diffuse; //Kd
+GLint   loc_u_obj_specular; //Ks
+GLint   loc_u_obj_shininess; //알파
+GLint   loc_a_normal; //normal
 
 GLuint create_shader_from_file(const std::string& filename, GLuint shader_type);
 void init_shader_program();
@@ -564,10 +564,13 @@ void render_object()
   for (std::size_t i = 0; i < g_models.size(); ++i)
   {
     Model& model = g_models[i];
+  
+    // FIXED : : set mat_model, mat_normal, mat_PVM
+    glm::mat_model = model.get_model_matrix();
+    glm::mat_PVM = mat_proj * mat_view * mat_model;
 
-    // TODO : set mat_model, mat_normal, mat_PVM 
-    // TODO : send uniform data for model to GPU
-    
+    // FIXED : send uniform data for model to GPU
+    glUniformMatrix4fv(loc_u_PVM, 1, GL_FALSE, glm::value_ptr(mat_PVM));    
     model.draw(loc_a_position, loc_a_normal, loc_u_obj_ambient, loc_u_obj_diffuse, loc_u_obj_specular, loc_u_obj_shininess);
   }
 
