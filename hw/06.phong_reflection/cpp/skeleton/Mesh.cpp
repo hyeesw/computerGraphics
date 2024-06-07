@@ -30,10 +30,12 @@ void Mesh::update_tv_indices()
 
 // Mesh.cpp에서 메쉬 데이터를 GPU 버퍼로 설정
 void Mesh::set_gl_position_buffer_() {
-    std::vector<glm::vec3> tv_positions(tv_indices_.size());
+    std::vector<glm::vec3> tv_positions(tv_indices_.size()); // 벡터 사이즈 초기화
     for (size_t i = 0; i < tv_indices_.size(); i++) {
-        tv_positions[i] = glm::vec3(pmesh_->mVertices[tv_indices_[i]]);
+        const aiVector3D& vertex = pmesh_->mVertices[tv_indices_[i]];
+        tv_positions[i] = glm::vec3(vertex.x, vertex.y, vertex.z); // aiVector3D에서 glm::vec3로 변환
     }
+
     glBindBuffer(GL_ARRAY_BUFFER, position_buffer_);
     glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * tv_positions.size(), tv_positions.data(), GL_STATIC_DRAW);
 }
