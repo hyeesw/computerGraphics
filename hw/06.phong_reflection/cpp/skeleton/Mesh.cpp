@@ -57,9 +57,13 @@ void Mesh::set_gl_normal_buffer_(ShadingType shading_type)
 
     // Compute normals for each triangle
     for (size_t i = 0; i < tv_indices_.size(); i += 3) {
-        glm::vec3 v0 = pmesh_->mVertices[tv_indices_[i]];
-        glm::vec3 v1 = pmesh_->mVertices[tv_indices_[i + 1]];
-        glm::vec3 v2 = pmesh_->mVertices[tv_indices_[i + 2]];
+        aiVector3D aiv0 = pmesh_->mVertices[tv_indices_[i]];
+        aiVector3D aiv1 = pmesh_->mVertices[tv_indices_[i + 1]];
+        aiVector3D aiv2 = pmesh_->mVertices[tv_indices_[i + 2]];
+
+        glm::vec3 v0(aiv0.x, aiv0.y, aiv0.z);
+        glm::vec3 v1(aiv1.x, aiv1.y, aiv1.z);
+        glm::vec3 v2(aiv2.x, aiv2.y, aiv2.z);
 
         glm::vec3 normal = glm::normalize(glm::cross(v1 - v0, v2 - v0));
 
