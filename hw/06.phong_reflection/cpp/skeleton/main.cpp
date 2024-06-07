@@ -499,15 +499,11 @@ GLuint create_shader_from_file(const std::string& filename, GLuint shader_type)
 // vertex shader와 fragment shader를 링크시켜 program을 생성하는 함수
 void init_shader_program()
 {
-  GLuint vertex_shader
-    = create_shader_from_file("./shader/vertex.glsl", GL_VERTEX_SHADER);
-
+  GLuint vertex_shader = create_shader_from_file("./shader/vertex.glsl", GL_VERTEX_SHADER);
   std::cout << "vertex_shader id: " << vertex_shader << std::endl;
   assert(vertex_shader != 0);
 
-  GLuint fragment_shader
-    = create_shader_from_file("./shader/fragment.glsl", GL_FRAGMENT_SHADER);
-
+  GLuint fragment_shader = create_shader_from_file("./shader/fragment.glsl", GL_FRAGMENT_SHADER);
   std::cout << "fragment_shader id: " << fragment_shader << std::endl;
   assert(fragment_shader != 0);
 
@@ -515,6 +511,7 @@ void init_shader_program()
   glAttachShader(program, vertex_shader);
   glAttachShader(program, fragment_shader);
   glLinkProgram(program);
+  glUseProgram(program);
 
   GLint is_linked;
   glGetProgramiv(program, GL_LINK_STATUS, &is_linked);
