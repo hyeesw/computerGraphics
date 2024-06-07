@@ -588,8 +588,8 @@ void render_object() {
         glUniformMatrix4fv(loc_u_model_matrix, 1, GL_FALSE, glm::value_ptr(modelMatrix));
         glUniformMatrix4fv(loc_u_normal_matrix, 1, GL_FALSE, glm::value_ptr(normalMatrix));
 
-        // 새로운 메소드 시그니처에 맞게 draw 호출 업데이트
-        model.draw(loc_a_position, loc_a_normal);
+        // 모델의 draw 메소드에 필요한 재질 유니폼 변수를 전달
+        model.draw(loc_a_position, loc_a_normal, loc_u_light_ambient, loc_u_light_diffuse, loc_u_light_specular, loc_u_obj_shininess);
     }
 
     // 쉐이더 사용 해제
