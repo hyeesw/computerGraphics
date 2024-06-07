@@ -573,7 +573,7 @@ void render_object() {
 
     // 카메라 및 조명 유니폼 설정
     glUniformMatrix4fv(loc_u_view_matrix, 1, GL_FALSE, glm::value_ptr(viewMatrix));
-    glUniformMatrix4fv(loc_u_PVM, 1, GL_FALSE, glm::value_ptr(projectionMatrix)); // 이름 변경
+    glUniformMatrix4fv(loc_u_PVM, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
     glUniform3fv(loc_u_camera_position, 1, glm::value_ptr(camera.position()));
     glUniform3fv(loc_u_light_position, 1, glm::value_ptr(g_light.pos));
     glUniform3fv(loc_u_light_ambient, 1, glm::value_ptr(g_light.ambient));
@@ -588,8 +588,8 @@ void render_object() {
         glUniformMatrix4fv(loc_u_model_matrix, 1, GL_FALSE, glm::value_ptr(modelMatrix));
         glUniformMatrix4fv(loc_u_normal_matrix, 1, GL_FALSE, glm::value_ptr(normalMatrix));
 
-        // 이름 변경하여 매개변수 전달
-        model.draw(loc_a_position, loc_a_normal, loc_u_obj_ambient, loc_u_obj_diffuse, loc_u_obj_specular, loc_u_obj_shininess);
+        // 새로운 메소드 시그니처에 맞게 draw 호출 업데이트
+        model.draw(loc_a_position, loc_a_normal);
     }
 
     // 쉐이더 사용 해제
