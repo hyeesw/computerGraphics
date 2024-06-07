@@ -41,7 +41,7 @@ public:
 
   const glm::mat4  get_view_matrix() const;
   const glm::mat4  get_projection_matrix() const;
-  const update_projection_matrix();
+  void update_projection_matrix();
 
   const float fovy() const                   { return fovy_; }
   void  set_fovy(float _fovy)                { fovy_ = _fovy; }
