@@ -104,21 +104,29 @@ void Mesh::set_gl_buffers(ShadingType shading_type)
     set_gl_normal_buffer_(shading_type);
 }
 
+void Mesh::draw(int loc_a_position, int loc_a_normal, int loc_u_ambient, int loc_u_diffuse, int loc_u_specular, int loc_u_shininess) {
+    // 버텍스 배열 객체 바인딩
+    glBindBuffer(GL_ARRAY_BUFFER, position_buffer_);
+    glEnableVertexAttribArray(loc_a_position);
+    glVertexAttribPointer(loc_a_position, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
 
-void Mesh::draw(int loc_a_position, int loc_a_normal)
-{
-    // TODO : draw a triangular mesh
-    //          glBindBuffer() with position_buffer_
-    //          glEnableVertexAttribArray() for loc_a_position  
-    //          glVertexAttribPointer() by reusing GPU data in loc_a_position
-    //
-    //          glBindBuffer() with normal_buffer_
-    //          glEnableVertexAttribArray() for loc_a_normal  
-    //          glVertexAttribPointer() by reusing GPU data in loc_a_normal
-    //
-    //          glDrawArrays(GL_TRIANGLES, ...)
-    //
-    //          glDisableVertexAttribArray() for loc_a_position & loc_a_normal
+    // 노멀 배열 객체 바인딩
+    glBindBuffer(GL_ARRAY_BUFFER, normal_buffer_);
+    glEnableVertexAttribArray(loc_a_normal);
+    glVertexAttribPointer(loc_a_normal, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+
+    // 재질 설정 전송
+    glUniform3fv(loc_u_ambient, 1, glm::value_ptr(material.ambient));
+    glUniform3fv(loc_u_diffuse, 1, glm::value_ptr(material.diffuse));
+    glUniform3fv(loc_u_specular, 1, glm::value_ptr(material.specular));
+    glUniform1f(loc_u_shininess, material.shininess);
+
+    // 삼각형 그리기
+    glDrawArrays(GL_TRIANGLES, 0, tv_indices_.size());
+
+    // 정점 배열 비활성화
+    glDisableVertexAttribArray(loc_a_position);
+    glDisableVertexAttribArray(loc_a_normal);
 }
     
 void Mesh::print_info()
