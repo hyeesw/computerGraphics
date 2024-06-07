@@ -566,13 +566,6 @@ void render_object() {
     Camera& camera = g_cameras[g_cam_select_idx];
 
     glm::mat4 viewMatrix = camera.get_view_matrix();
-    if (mode == kPerspective) {
-        // 시야각, 종횡비, near, far 클리핑 플레인을 설정
-        projection_matrix = glm::perspective(glm::radians(fovy), aspect, 0.1f, 100.0f);
-    } else {
-        // 직교 투영을 위한 설정
-        projection_matrix = glm::ortho(-aspect * ortho_scale, aspect * ortho_scale, -ortho_scale, ortho_scale, 0.1f, 100.0f);
-    }
     glm::mat4 projectionMatrix = camera.get_projection_matrix();
 
     // 쉐이더 사용
@@ -580,7 +573,7 @@ void render_object() {
 
     // 카메라 및 조명 유니폼 설정
     glUniformMatrix4fv(loc_u_view_matrix, 1, GL_FALSE, glm::value_ptr(viewMatrix));
-    glUniformMatrix4fv(loc_u_PVM, 1, GL_FALSE, glm::value_ptr(projectionMatrix)); // 업데이트된 투영 매트릭스 사용
+    glUniformMatrix4fv(loc_u_PVM, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
     glUniform3fv(loc_u_camera_position, 1, glm::value_ptr(camera.position()));
     glUniform3fv(loc_u_light_position, 1, glm::value_ptr(g_light.pos));
     glUniform3fv(loc_u_light_ambient, 1, glm::value_ptr(g_light.ambient));
