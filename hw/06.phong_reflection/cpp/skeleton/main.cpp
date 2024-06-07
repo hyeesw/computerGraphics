@@ -568,6 +568,12 @@ void render_object() {
     glm::mat4 viewMatrix = camera.get_view_matrix();
     glm::mat4 projectionMatrix = camera.get_projection_matrix();
 
+    // 조명 위치 및 색상 설정
+    glm::vec3 lightPosition = glm::vec3(0.0f, 10.0f, 10.0f);  // 조명 위치 조정
+    glm::vec3 lightAmbient = glm::vec3(0.2f, 0.2f, 0.2f);  // 환경광 증가
+    glm::vec3 lightDiffuse = glm::vec3(0.5f, 0.5f, 0.5f);  // 난반사광 증가
+    glm::vec3 lightSpecular = glm::vec3(1.0f, 1.0f, 1.0f);  // 경면반사광 증가
+
     // 쉐이더 사용
     glUseProgram(program);
 
@@ -575,10 +581,10 @@ void render_object() {
     glUniformMatrix4fv(loc_u_view_matrix, 1, GL_FALSE, glm::value_ptr(viewMatrix));
     glUniformMatrix4fv(loc_u_PVM, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
     glUniform3fv(loc_u_camera_position, 1, glm::value_ptr(camera.position()));
-    glUniform3fv(loc_u_light_position, 1, glm::value_ptr(g_light.pos));
-    glUniform3fv(loc_u_light_ambient, 1, glm::value_ptr(g_light.ambient));
-    glUniform3fv(loc_u_light_diffuse, 1, glm::value_ptr(g_light.diffuse));
-    glUniform3fv(loc_u_light_specular, 1, glm::value_ptr(g_light.specular));
+    glUniform3fv(loc_u_light_position, 1, glm::value_ptr(lightPosition));
+    glUniform3fv(loc_u_light_ambient, 1, glm::value_ptr(lightAmbient));
+    glUniform3fv(loc_u_light_diffuse, 1, glm::value_ptr(lightDiffuse));
+    glUniform3fv(loc_u_light_specular, 1, glm::value_ptr(lightSpecular));
 
     // 모델 그리기
     for (auto& model : g_models) {
@@ -588,10 +594,8 @@ void render_object() {
         glUniformMatrix4fv(loc_u_model_matrix, 1, GL_FALSE, glm::value_ptr(modelMatrix));
         glUniformMatrix4fv(loc_u_normal_matrix, 1, GL_FALSE, glm::value_ptr(normalMatrix));
 
-        // 모델의 draw 메소드에 필요한 재질 유니폼 변수를 전달
         model.draw(loc_a_position, loc_a_normal, loc_u_light_ambient, loc_u_light_diffuse, loc_u_light_specular, loc_u_obj_shininess);
     }
-
     // 쉐이더 사용 해제
     glUseProgram(0);
 }
