@@ -93,3 +93,15 @@ void Camera::move_up(float delta){
 void Camera::move_down(float delta){
   position_ -= up_dir_ * delta;
 }
+
+void Camera::update_projection_matrix() {
+    if (mode == kPerspective) {
+        projection_matrix = glm::perspective(glm::radians(fovy), aspect, near_plane, far_plane);
+    } else {
+        projection_matrix = glm::ortho(-aspect * ortho_scale, aspect * ortho_scale, -ortho_scale, ortho_scale, near_plane, far_plane);
+    }
+}
+
+glm::mat4 Camera::get_projection_matrix() {
+    return projection_matrix;
+}
