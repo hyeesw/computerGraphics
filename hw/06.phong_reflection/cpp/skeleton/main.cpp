@@ -54,22 +54,22 @@ GLint   loc_a_position;   // attribute 변수 a_position 위치
 GLint   loc_a_color;      // attribute 변수 a_color 위치
 GLint   loc_u_PVM;        // uniform 변수 u_PVM 위치
 
-GLint   loc_u_view_matrix; // view matrix
+GLint   loc_u_view_matrix;
 GLint   loc_u_model_matrix;
 GLint   loc_u_normal_matrix;
 
-GLint   loc_u_camera_position; // 카메라 위치
-GLint   loc_u_light_position; //광원 위치
+GLint   loc_u_camera_position;
+GLint   loc_u_light_position;
 
-GLint   loc_u_light_ambient; //La
-GLint   loc_u_light_diffuse; //Lb
-GLint   loc_u_light_specular; //Ls
+GLint   loc_u_light_ambient;
+GLint   loc_u_light_diffuse;
+GLint   loc_u_light_specular;
 
-GLint   loc_u_obj_ambient; //Ka
-GLint   loc_u_obj_diffuse; //Kd
-GLint   loc_u_obj_specular; //Ks
-GLint   loc_u_obj_shininess; //알파
-GLint   loc_a_normal; //normal
+GLint   loc_u_obj_ambient;
+GLint   loc_u_obj_diffuse;
+GLint   loc_u_obj_specular;
+GLint   loc_u_obj_shininess;
+GLint   loc_a_normal;
 
 GLuint create_shader_from_file(const std::string& filename, GLuint shader_type);
 void init_shader_program();
@@ -88,6 +88,7 @@ std::vector<Model> g_models;
 Light g_light;
 
 bool load_asset(const std::string& filename);
+// void init_buffer_objects();     // VBO init 함수: GPU의 VBO를 초기화하는 함수.
 void render_object();           // rendering 함수: 물체(삼각형)를 렌더링하는 함수.
 void render(GLFWwindow* window);
 ////////////////////////////////////////////////////////////////////////////////
@@ -203,6 +204,8 @@ void init_window(GLFWwindow* window)
   init_shader_program();
 
   glEnable(GL_DEPTH_TEST);
+
+  // init_buffer_objects();
 
   glfwSetKeyCallback(window, key_callback);
   glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
@@ -496,11 +499,15 @@ GLuint create_shader_from_file(const std::string& filename, GLuint shader_type)
 // vertex shader와 fragment shader를 링크시켜 program을 생성하는 함수
 void init_shader_program()
 {
-  GLuint vertex_shader = create_shader_from_file("./shader/vertex.glsl", GL_VERTEX_SHADER);
+  GLuint vertex_shader
+    = create_shader_from_file("./shader/vertex.glsl", GL_VERTEX_SHADER);
+
   std::cout << "vertex_shader id: " << vertex_shader << std::endl;
   assert(vertex_shader != 0);
 
-  GLuint fragment_shader= create_shader_from_file("./shader/fragment.glsl", GL_FRAGMENT_SHADER);
+  GLuint fragment_shader
+    = create_shader_from_file("./shader/fragment.glsl", GL_FRAGMENT_SHADER);
+
   std::cout << "fragment_shader id: " << fragment_shader << std::endl;
   assert(fragment_shader != 0);
 
@@ -534,57 +541,52 @@ void init_shader_program()
 
   loc_a_position = glGetAttribLocation(program, "a_position");
   loc_a_color = glGetAttribLocation(program, "a_color");
-  loc_a_normal = glGetAttribLocation(program, "a_normal");
 
-  // FIXED: get locations of the GPU uniform/attribute variables 
+  // TODO: get locations of the GPU uniform/attribute variables 
   //       for implementing Phong reflection model
+  loc_u_view_matrix = glGetUniformLocation(program, "u_view_matrix");
+  loc_u_model_matrix = glGetUniformLocation(program, "u_model_matrix");
+  loc_u_normal_matrix = glGetUniformLocation(program, "u_normal_matrix");
+
   loc_u_camera_position = glGetUniformLocation(program, "u_camera_position");
   loc_u_light_position = glGetUniformLocation(program, "u_light_position");
+
   loc_u_light_ambient = glGetUniformLocation(program, "u_light_ambient");
   loc_u_light_diffuse = glGetUniformLocation(program, "u_light_diffuse");
   loc_u_light_specular = glGetUniformLocation(program, "u_light_specular");
-  
-  loc_u_model_matrix = glGetUniformLocation(program, "u_model_matrix");
-  loc_u_view_matrix = glGetUniformLocation(program, "u_view_matrix");
-  loc_u_normal_matrix = glGetUniformLocation(program, "u_normal_matrix");
 
   loc_u_obj_ambient = glGetUniformLocation(program, "u_obj_ambient");
   loc_u_obj_diffuse = glGetUniformLocation(program, "u_obj_diffuse");
   loc_u_obj_specular = glGetUniformLocation(program, "u_obj_specular");
   loc_u_obj_shininess = glGetUniformLocation(program, "u_obj_shininess");
+  loc_a_normal = glGetAttribLocation(program, "a_normal");
 }
 
 void render_object()
 {
   Camera& camera = g_cameras[g_cam_select_idx];
+
+  // set transform
   glm::mat4 mat_view = camera.get_view_matrix();
   glm::mat4 mat_proj = camera.get_projection_matrix();
 
+
+  // 특정 쉐이더 프로그램 사용
   glUseProgram(program);
 
-  glUniformMatrix4fv(loc_u_view_matrix, 1, GL_FALSE, glm::value_ptr(mat_view));
-  glm::vec3 camera_position = camera.get_pose();
-  glUniform3fv(loc_u_camera_position, 1, glm::value_ptr(camera_position));
-
-  glUniform3fv(loc_u_light_position, 1, glm::value_ptr(g_light.pos));
-  glUniform3fv(loc_u_light_ambient, 1, glm::value_ptr(g_light.ambient));
-  glUniform3fv(loc_u_light_diffuse, 1, glm::value_ptr(g_light.diffuse));
-  glUniform3fv(loc_u_light_specular, 1, glm::value_ptr(g_light.specular));
+  // TODO : send uniform for camera & light to GPU
 
   for (std::size_t i = 0; i < g_models.size(); ++i)
   {
     Model& model = g_models[i];
-    glm::mat4 mat_model = model.get_model_matrix();
-    glm::mat4 mat_normal = glm::transpose(glm::inverse(mat_model));
-    glm::mat4 mat_PVM = mat_proj * mat_view * mat_model;
 
-    glUniformMatrix4fv(loc_u_model_matrix, 1, GL_FALSE, glm::value_ptr(mat_model));
-    glUniformMatrix4fv(loc_u_normal_matrix, 1, GL_FALSE, glm::value_ptr(mat_normal));
-    glUniformMatrix4fv(loc_u_PVM, 1, GL_FALSE, glm::value_ptr(mat_PVM));
-
+    // TODO : set mat_model, mat_normal, mat_PVM 
+    // TODO : send uniform data for model to GPU
+    
     model.draw(loc_a_position, loc_a_normal, loc_u_obj_ambient, loc_u_obj_diffuse, loc_u_obj_specular, loc_u_obj_shininess);
   }
 
+  // 쉐이더 프로그램 사용해제
   glUseProgram(0);
 }
 

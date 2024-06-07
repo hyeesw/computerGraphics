@@ -14,13 +14,10 @@ glm::mat4 Model::get_model_matrix() const
 }
 
 
-void Model::draw(int loc_a_position, int loc_a_normal, int loc_u_ambient, int loc_u_diffuse, int loc_u_specular, int loc_u_shininess)
-{
-    for (std::size_t i = 0; i < meshes.size(); ++i)
-    {
+// Model.cpp에서 물체를 렌더링하고 재질 데이터를 GPU에 전송
+void Model::draw(int loc_a_position, int loc_a_normal, int loc_u_ambient, int loc_u_diffuse, int loc_u_specular, int loc_u_shininess) {
+    for (std::size_t i = 0; i < meshes.size(); ++i) {
         Mesh& mesh = meshes[i];
-
-        // FIXED : send material data to GPU
         glUniform3fv(loc_u_ambient, 1, glm::value_ptr(mesh.material.ambient));
         glUniform3fv(loc_u_diffuse, 1, glm::value_ptr(mesh.material.diffuse));
         glUniform3fv(loc_u_specular, 1, glm::value_ptr(mesh.material.specular));
