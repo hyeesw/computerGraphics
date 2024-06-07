@@ -564,27 +564,42 @@ void init_shader_program()
 
 void render_object() {
     Camera& camera = g_cameras[g_cam_select_idx];
+
     glm::mat4 viewMatrix = camera.get_view_matrix();
-    camera.update_projection_matrix();  // 카메라의 투영 매트릭스 업데이트
+    if (mode == kPerspective) {
+        // 시야각, 종횡비, near, far 클리핑 플레인을 설정
+        projection_matrix = glm::perspective(glm::radians(fovy), aspect, 0.1f, 100.0f);
+    } else {
+        // 직교 투영을 위한 설정
+        projection_matrix = glm::ortho(-aspect * ortho_scale, aspect * ortho_scale, -ortho_scale, ortho_scale, 0.1f, 100.0f);
+    }
     glm::mat4 projectionMatrix = camera.get_projection_matrix();
 
+    // 쉐이더 사용
     glUseProgram(program);
+
+    // 카메라 및 조명 유니폼 설정
     glUniformMatrix4fv(loc_u_view_matrix, 1, GL_FALSE, glm::value_ptr(viewMatrix));
-    glUniformMatrix4fv(loc_u_PVM, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
+    glUniformMatrix4fv(loc_u_PVM, 1, GL_FALSE, glm::value_ptr(projectionMatrix)); // 업데이트된 투영 매트릭스 사용
     glUniform3fv(loc_u_camera_position, 1, glm::value_ptr(camera.position()));
     glUniform3fv(loc_u_light_position, 1, glm::value_ptr(g_light.pos));
     glUniform3fv(loc_u_light_ambient, 1, glm::value_ptr(g_light.ambient));
     glUniform3fv(loc_u_light_diffuse, 1, glm::value_ptr(g_light.diffuse));
     glUniform3fv(loc_u_light_specular, 1, glm::value_ptr(g_light.specular));
 
+    // 모델 그리기
     for (auto& model : g_models) {
         glm::mat4 modelMatrix = model.get_model_matrix();
         glm::mat4 normalMatrix = glm::transpose(glm::inverse(modelMatrix));
+
         glUniformMatrix4fv(loc_u_model_matrix, 1, GL_FALSE, glm::value_ptr(modelMatrix));
         glUniformMatrix4fv(loc_u_normal_matrix, 1, GL_FALSE, glm::value_ptr(normalMatrix));
+
+        // 모델의 draw 메소드에 필요한 재질 유니폼 변수를 전달
         model.draw(loc_a_position, loc_a_normal, loc_u_light_ambient, loc_u_light_diffuse, loc_u_light_specular, loc_u_obj_shininess);
     }
 
+    // 쉐이더 사용 해제
     glUseProgram(0);
 }
 
