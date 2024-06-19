@@ -574,8 +574,7 @@ void render_object()
 
   // 특정 쉐이더 프로그램 사용
   glUseProgram(program);
-  
-  // TODO : send uniform for camera & light to GPU
+
   glUniform3fv(loc_u_camera_position, 1, glm::value_ptr(camera.position()));
   glUniform3fv(loc_u_light_position, 1, glm::value_ptr(g_light.pos));
   glUniform3fv(loc_u_light_ambient, 1, glm::value_ptr(g_light.ambient));
@@ -586,12 +585,10 @@ void render_object()
   {
     Model &model = g_models[i];
 
-    // TODO : set mat_model, mat_normal, mat_PVM
     glm::mat4 mat_model = model.get_model_matrix();
     glm::mat4 mat_PVM = mat_proj * mat_view * mat_model;
     glm::mat3 mat_normal = glm::transpose(glm::inverse(glm::mat3(mat_model)));
 
-    // TODO : send uniform data for model to GPU
     glUniformMatrix4fv(loc_u_model_matrix, 1, GL_FALSE, glm::value_ptr(mat_model));
     glUniformMatrix4fv(loc_u_PVM, 1, GL_FALSE, glm::value_ptr(mat_PVM));
     glUniformMatrix3fv(loc_u_normal_matrix, 1, GL_FALSE, glm::value_ptr(mat_normal));

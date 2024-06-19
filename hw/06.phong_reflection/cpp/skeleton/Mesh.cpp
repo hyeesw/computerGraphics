@@ -32,7 +32,6 @@ void Mesh::set_gl_position_buffer_()
 
     std::vector<glm::vec3> tv_positions; // per triangle-vertex 3D position (size = 3 x #triangles)
 
-    // TODO: for each triangle, set tv_positions
     for (const auto &index : tv_indices_)
     {
         const aiVector3D &vertex = pmesh_->mVertices[index];
@@ -49,7 +48,6 @@ void Mesh::set_gl_color_buffer_(unsigned int cs_idx)
 
     std::vector<glm::vec3> tv_colors; // per triangle-vertex 3D position (size = 3 x #triangles)
 
-    // TODO: for each triangle, set tv_colors
     for (const auto &index : tv_indices_)
     {
         const aiColor4D &color = pmesh_->mColors[cs_idx][index];
@@ -135,33 +133,15 @@ void Mesh::set_gl_buffers(ShadingType shading_type)
 
 void Mesh::draw(int loc_a_position, int loc_a_normal)
 {
-    // TODO : draw a triangular mesh
-    //          glBindBuffer() with position_buffer_
-    //          glEnableVertexAttribArray() for loc_a_position
-    //          glVertexAttribPointer() by reusing GPU data in loc_a_position
-    //
-    //          glBindBuffer() with normal_buffer_
-    //          glEnableVertexAttribArray() for loc_a_normal
-    //          glVertexAttribPointer() by reusing GPU data in loc_a_normal
-    //
-    //          glDrawArrays(GL_TRIANGLES, ...)
-    //
-    //          glDisableVertexAttribArray() for loc_a_position & loc_a_normal
-
-    // Bind position buffer
     glEnableVertexAttribArray(loc_a_position);
     glBindBuffer(GL_ARRAY_BUFFER, position_buffer_);
     glVertexAttribPointer(loc_a_position, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-    // Bind normal buffer
     glEnableVertexAttribArray(loc_a_normal);
     glBindBuffer(GL_ARRAY_BUFFER, normal_buffer_);
     glVertexAttribPointer(loc_a_normal, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-    // Draw the mesh
     glDrawArrays(GL_TRIANGLES, 0, tv_indices_.size());
-
-    // Disable attribute arrays
     glDisableVertexAttribArray(loc_a_position);
     glDisableVertexAttribArray(loc_a_normal);
 }
